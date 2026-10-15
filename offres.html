@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formules — SommeilExpress</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="demo-banner">Site parodique de démonstration — projet étudiant (Génie Logiciel). Marque fictive, rien n'est vendu, aucune donnée n'est envoyée.</div>
+
+  <header>
+    <a class="logo" href="index.html">Sommeil<span>Express</span></a>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="offres.html">Formules</a>
+      <a href="inscription.html">Commander</a>
+    </nav>
+  </header>
+
+  <main>
+    <section style="border-top:none">
+      <h2>Nos formules</h2>
+      <p>Sans engagement. Paiement en cafés, en tickets RU ou en promesses de faire ta part du projet.</p>
+
+      <div class="grid-3">
+        <div class="card plan">
+          <h3>😴 Sieste Flash</h3>
+          <div class="price">2 €<small> / sieste</small></div>
+          <ul>
+            <li>20 minutes entre deux TP</li>
+            <li>Réveil garanti avant l'appel</li>
+            <li>Compatible build Maven en cours</li>
+          </ul>
+          <a class="btn secondary" href="inscription.html?formule=flash" data-event="plan_flash">Choisir</a>
+        </div>
+
+        <div class="card plan featured">
+          <span class="tag">Le plus choisi en période de partiels</span>
+          <h3>📚 Pack Partiels</h3>
+          <div class="price">15 €<small> / semaine</small></div>
+          <ul>
+            <li>4h de sommeil réparties sur 7 jours</li>
+            <li>Café offert (on sait comment ça finit)</li>
+            <li>Option « rêver des réponses »*</li>
+          </ul>
+          <p class="joke">*résultats non garantis</p>
+          <a class="btn" href="inscription.html?formule=partiels" data-event="plan_partiels">Choisir</a>
+        </div>
+
+        <div class="card plan">
+          <h3>🛌 Nuit Complète</h3>
+          <div class="price">99 €<small> / nuit</small></div>
+          <ul>
+            <li>8 heures d'affilée (oui, ça existe)</li>
+            <li>Luxe rare, stock très limité</li>
+            <li>Non disponible la veille d'un rendu</li>
+          </ul>
+          <a class="btn secondary" href="inscription.html?formule=nuit" data-event="plan_nuit">Choisir</a>
+        </div>
+      </div>
+
+      <!-- PIÈGE n°4 : lien qui ne mène nulle part -->
+      <a class="compare-link" href="#" onclick="return false;" data-event="dead_click_compare">Comparer les formules en détail →</a>
+    </section>
+  </main>
+
+  <footer>
+    SommeilExpress est une marque fictive et parodique créée pour une démonstration de Hotjar. Aucune heure de sommeil n'a été maltraitée.
+    · <button id="consent-reset" type="button">Gérer les cookies</button>
+  </footer>
+
+  <div class="consent" id="consent" role="dialog" aria-label="Consentement">
+    <p>🍪 Ce site utilise <strong>Hotjar</strong> pour analyser anonymement la navigation (clics, défilement, enregistrements de session). Promis, on ne regarde pas à quelle heure tu te couches. Les champs personnels sont masqués.</p>
+    <div class="actions">
+      <button class="btn" id="consent-yes" type="button">Accepter</button>
+      <button class="btn secondary" id="consent-no" type="button">Refuser</button>
+    </div>
+  </div>
+</body>
+</html>

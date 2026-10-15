@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SommeilExpress — on te livre des heures de sommeil</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="demo-banner">Site parodique de démonstration — projet étudiant (Génie Logiciel). Marque fictive, rien n'est vendu, aucune donnée n'est envoyée.</div>
+
+  <header>
+    <a class="logo" href="index.html">Sommeil<span>Express</span></a>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="offres.html">Formules</a>
+      <a href="inscription.html">Commander</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Tu dors pas assez ? On te livre des heures.</h1>
+        <p>Entre l'amphi de 8h, l'alternance, les TP qui finissent à 18h et le projet de groupe que tu portes seul, ton sommeil est devenu une légende urbaine. SommeilExpress te le ramène, emballé sous vide.</p>
+        <!-- PIÈGE n°1 : ressemble à un bouton, mais aucun lien -->
+        <div class="fake-badge" data-event="dead_click_badge">😴 Dormir maintenant</div>
+        <p class="joke">Livraison garantie avant le prochain amphi de 8h*.<br>*sauf si le tram est en retard.</p>
+      </div>
+      <div class="hero-visual" aria-hidden="true"><span class="zzz">Zzz</span></div>
+    </div>
+
+    <section>
+      <h2>Pourquoi SommeilExpress ?</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>🌙 Sommeil 100 % frais</h3>
+          <p>Récolté la nuit même chez des étudiants en vacances, qui eux n'en ont pas besoin. Circuit court, zéro intermédiaire.</p>
+        </div>
+        <div class="card">
+          <h3>⚡ Compatible alternance</h3>
+          <p>Nos heures se consomment en entreprise comme à l'école. Fonctionne aussi en réunion d'équipe, caméra éteinte.</p>
+        </div>
+        <div class="card">
+          <h3>☕ Sans caféine ajoutée</h3>
+          <p>Contrairement à ton 4ᵉ café de la journée. Ton cœur te remercie déjà.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Comment ça marche</h2>
+      <ol class="steps">
+        <li><strong>Choisis ta formule</strong> : de la Sieste Flash à la Nuit Complète (stock très limité).</li>
+        <li><strong>Indique quand tu veux dormir</strong> : on évite les créneaux de partiels, on n'est pas des monstres.</li>
+        <li><strong>Reçois tes heures</strong> : livrées en sachet, à ouvrir sous la couette.</li>
+        <li><strong>Dors</strong> : c'est la seule étape que tu dois faire toi-même. Désolé.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Ils ont testé (avis 100 % inventés)</h2>
+      <div class="grid-3">
+        <div class="card">
+          <p>« J'ai dormi 8h d'affilée. Je ne savais pas que c'était légal. »</p>
+          <p class="joke">— Un étudiant en 2ᵉ année, encore sous le choc</p>
+        </div>
+        <div class="card">
+          <p>« J'ai pris le Pack Partiels. J'ai raté l'examen, mais j'étais très reposé. »</p>
+          <p class="joke">— Quelqu'un qui assume ses choix</p>
+        </div>
+        <div class="card">
+          <p>« Mon binôme a commandé une Nuit Complète la veille du rendu. Je le cherche encore. »</p>
+          <p class="joke">— Un chef de projet malgré lui</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Questions fréquentes</h2>
+      <details><summary>Est-ce que je peux dormir en amphi avec ?</summary><p>Techniquement oui. Moralement, on te laisse voir avec ton prof.</p></details>
+      <details><summary>Les heures non dormies sont-elles remboursées ?</summary><p>Non, mais elles sont reportées sur ta prochaine semaine de vacances (qui n'existe pas en alternance).</p></details>
+      <details><summary>Mon build Maven tourne depuis 40 minutes, je peux dormir en attendant ?</summary><p>C'est exactement pour ça qu'on a créé la Sieste Flash.</p></details>
+      <details><summary>Livrez-vous à la résidence étudiante ?</summary><p>Oui, mais le voisin qui joue de la guitare à 2h n'est pas inclus dans l'offre.</p></details>
+      <details><summary>Je suis en retard sur mes Issues GitLab, c'est grave ?</summary><p>Dors d'abord. Elles seront toujours « status::doing » demain.</p></details>
+    </section>
+
+    <!-- PIÈGE n°2 : le seul vrai bouton d'action est tout en bas -->
+    <div class="final-cta">
+      <h2>Si tu as lu jusqu'ici, tu n'es clairement pas assez fatigué.</h2>
+      <p>Mais on te laisse quand même commander.</p>
+      <a class="btn" href="offres.html" data-event="cta_bottom_click">Choisir ma formule</a>
+    </div>
+  </main>
+
+  <footer>
+    SommeilExpress est une marque fictive et parodique créée pour une démonstration de Hotjar. Aucune heure de sommeil n'a été maltraitée.
+    · <button id="consent-reset" type="button">Gérer les cookies</button>
+  </footer>
+
+  <div class="consent" id="consent" role="dialog" aria-label="Consentement">
+    <p>🍪 Ce site utilise <strong>Hotjar</strong> pour analyser anonymement la navigation (clics, défilement, enregistrements de session). Promis, on ne regarde pas à quelle heure tu te couches. Les champs personnels sont masqués.</p>
+    <div class="actions">
+      <button class="btn" id="consent-yes" type="button">Accepter</button>
+      <button class="btn secondary" id="consent-no" type="button">Refuser</button>
+    </div>
+  </div>
+</body>
+</html>

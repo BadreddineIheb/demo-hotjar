@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Commander — SommeilExpress</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="demo-banner">Site parodique de démonstration — projet étudiant (Génie Logiciel). Marque fictive, rien n'est vendu, aucune donnée n'est envoyée.</div>
+
+  <header>
+    <a class="logo" href="index.html">Sommeil<span>Express</span></a>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="offres.html">Formules</a>
+      <a href="inscription.html">Commander</a>
+    </nav>
+  </header>
+
+  <main>
+    <section style="border-top:none">
+      <h2>Commander mon sommeil</h2>
+      <p>Aucune donnée n'est envoyée : ce formulaire sert uniquement à la démonstration. Invente ce que tu veux.</p>
+
+      <!-- data-hj-suppress : Hotjar masque le contenu de ces champs dans
+           les enregistrements (on verra des ***** à la place du texte). -->
+      <form class="signup" id="signup" novalidate>
+        <div class="field">
+          <label for="formule">Formule</label>
+          <select id="formule" name="formule" required>
+            <option value="">— Choisir —</option>
+            <option value="flash">😴 Sieste Flash — 2 €</option>
+            <option value="partiels">📚 Pack Partiels — 15 €/semaine</option>
+            <option value="nuit">🛌 Nuit Complète — 99 €</option>
+          </select>
+          <span class="error-msg">Champ invalide.</span>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label for="firstname">Prénom</label>
+            <input id="firstname" name="firstname" required data-hj-suppress>
+            <span class="error-msg">Champ invalide.</span>
+          </div>
+          <div class="field">
+            <label for="lastname">Nom</label>
+            <input id="lastname" name="lastname" required data-hj-suppress>
+            <span class="error-msg">Champ invalide.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" required data-hj-suppress>
+          <span class="error-msg">Champ invalide.</span>
+        </div>
+
+        <!-- PIÈGE n°3 : format très strict (06 12 34 56 78), message d'erreur vague -->
+        <div class="field">
+          <label for="phone">Téléphone (pour le réveil)</label>
+          <input id="phone" name="phone" required data-hj-suppress>
+          <span class="error-msg">Champ invalide. Va dormir et réessaie.</span>
+        </div>
+
+        <div class="field">
+          <label for="address">Adresse de livraison (ton lit)</label>
+          <input id="address" name="address" required data-hj-suppress>
+          <span class="error-msg">Champ invalide.</span>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label for="bedtime">Heure de coucher réelle</label>
+            <select id="bedtime" name="bedtime" required>
+              <option value="">— Sois honnête —</option>
+              <option>22h (menteur)</option>
+              <option>Minuit</option>
+              <option>2h, « juste un épisode »</option>
+              <option>Je ne me couche plus</option>
+            </select>
+            <span class="error-msg">Champ invalide.</span>
+          </div>
+          <div class="field">
+            <label for="cause">Principale cause de fatigue</label>
+            <select id="cause" name="cause" required>
+              <option value="">— Choisir —</option>
+              <option>L'amphi de 8h</option>
+              <option>L'alternance</option>
+              <option>Le projet de groupe (porté seul)</option>
+              <option>Le pipeline GitLab rouge</option>
+              <option>Les séries</option>
+            </select>
+            <span class="error-msg">Champ invalide.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="source">Comment nous as-tu connus ?</label>
+          <select id="source" name="source" required>
+            <option value="">— Choisir —</option>
+            <option>Un camarade qui dormait en cours</option>
+            <option>Le groupe WhatsApp de la promo</option>
+            <option>J'ai cherché « comment survivre aux partiels »</option>
+            <option>Pendant une présentation sur Hotjar</option>
+          </select>
+          <span class="error-msg">Champ invalide.</span>
+        </div>
+
+        <button class="btn" type="submit">Valider ma commande de sommeil</button>
+      </form>
+
+      <div class="success" id="success">Commande validée ! Tes heures arrivent… dès que tu poses ton téléphone. 😴<br><small>(Démo : aucune donnée n'a été envoyée.)</small></div>
+    </section>
+  </main>
+
+  <footer>
+    SommeilExpress est une marque fictive et parodique créée pour une démonstration de Hotjar. Aucune heure de sommeil n'a été maltraitée.
+    · <button id="consent-reset" type="button">Gérer les cookies</button>
+  </footer>
+
+  <div class="consent" id="consent" role="dialog" aria-label="Consentement">
+    <p>🍪 Ce site utilise <strong>Hotjar</strong> pour analyser anonymement la navigation (clics, défilement, enregistrements de session). Promis, on ne regarde pas à quelle heure tu te couches. Les champs personnels sont masqués.</p>
+    <div class="actions">
+      <button class="btn" id="consent-yes" type="button">Accepter</button>
+      <button class="btn secondary" id="consent-no" type="button">Refuser</button>
+    </div>
+  </div>
+
+  <script>
+    // Pré-sélectionne la formule choisie sur la page Formules (?formule=partiels)
+    document.addEventListener("DOMContentLoaded", () => {
+      const f = new URLSearchParams(location.search).get("formule");
+      if (f) document.getElementById("formule").value = f;
+    });
+  </script>
+</body>
+</html>
