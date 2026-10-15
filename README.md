@@ -31,7 +31,7 @@ sessions avec `form_error` »). C'est un excellent moment de démo.
 ### Points RGPD / vie privée intégrés (à mentionner à l'oral)
 - **Bandeau de consentement** : Hotjar n'est chargé **qu'après** un clic sur « Accepter »
   (voir `loadHotjar()` dans `app.js`). Sans consentement → aucune donnée.
-- **`data-hj-suppress`** sur les champs personnels : dans les enregistrements, leur contenu
+- **`data-hj-suppress` / `data-cs-mask`** sur les champs personnels : dans les enregistrements, leur contenu
   apparaît masqué (`*****`). À montrer en rejouant une session du formulaire.
 - Lien « Gérer les cookies » en pied de page pour retirer son consentement.
 
@@ -57,7 +57,7 @@ ouvert en local ni sur `localhost`.
 2. Ajoute un site avec l'URL GitHub Pages ci-dessus.
 3. Récupère le **Site ID** (nombre à ~7 chiffres, visible dans *Sites & Organizations*
    ou dans le code de suivi proposé : `hjid:XXXXXXX`).
-4. Dans `app.js`, ligne `const HOTJAR_ID = 0;` → remplace `0` par ton Site ID.
+4. Dans `app.js`, ligne `const HOTJAR_ID = ...;` → mets ton identifiant. Nouveau format Hotjar/Contentsquare : chaîne hexadécimale entre guillemets (ex. `"2502c5d15712c"`, déjà configuré) ; ancien format : nombre (ex. `5123456`).
 5. Ré-uploade `app.js` sur GitHub (glisser-déposer → *Commit changes*).
 6. Ouvre ton site, clique **Accepter** sur le bandeau, puis dans Hotjar lance la
    **vérification de l'installation** (bouton *Verify installation*).

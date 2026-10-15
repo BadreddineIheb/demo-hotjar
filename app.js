@@ -1,13 +1,15 @@
 /* ============================================================
    CONFIGURATION — la SEULE ligne à modifier
-   Remplace 0 par le Site ID donné par Hotjar, ex. 5123456
-   (Hotjar > Sites & Organizations > colonne "Site ID").
+   Identifiant du code de suivi Hotjar.
+   - Nouveau format (Hotjar via Contentsquare) : une chaîne hexadécimale,
+     ex. "2502c5d15712c" -> charge https://t.contentsquare.net/uxa/<ID>.js
+   - Ancien format : un nombre (hjid), ex. 5123456
    ============================================================ */
-const HOTJAR_ID = 0;
+const HOTJAR_ID = "2502c5d15712c";
 
 const CONSENT_KEY = "sommeilexpress-consent";
 
-/* ---------- Chargement de Hotjar (snippet officiel) ----------
+/* ---------- Chargement de Hotjar ----------
    Pourquoi dans une fonction ? Le RGPD impose de ne déposer les
    cookies de mesure d'audience qu'APRÈS le consentement. Hotjar
    n'est donc chargé que si l'utilisateur clique « Accepter ».    */
@@ -16,23 +18,39 @@ function loadHotjar() {
     console.warn("[demo] HOTJAR_ID non renseigné dans app.js : Hotjar n'est pas chargé.");
     return;
   }
-  if (window.hj && window._hjSettings) return; // déjà chargé
-  (function (h, o, t, j, a, r) {
-    h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments); };
-    h._hjSettings = { hjid: HOTJAR_ID, hjsv: 6 };
-    a = o.getElementsByTagName("head")[0];
-    r = o.createElement("script"); r.async = 1;
-    r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-    a.appendChild(r);
-  })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+  if (window.__hotjarLoaded) return; // déjà chargé
+  window.__hotjarLoaded = true;
+
+  if (typeof HOTJAR_ID === "number") {
+    // Ancien snippet Hotjar (hjid numérique)
+    (function (h, o, t, j, a, r) {
+      h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments); };
+      h._hjSettings = { hjid: HOTJAR_ID, hjsv: 6 };
+      a = o.getElementsByTagName("head")[0];
+      r = o.createElement("script"); r.async = 1;
+      r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+      a.appendChild(r);
+    })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+  } else {
+    // Nouveau code de suivi Hotjar (balise Contentsquare)
+    window._uxa = window._uxa || [];
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "https://t.contentsquare.net/uxa/" + HOTJAR_ID + ".js";
+    document.head.appendChild(s);
+  }
 }
 
-/* ---------- Événements Hotjar ----------
-   hj('event', 'nom') permet ensuite de FILTRER les enregistrements
-   dans Hotjar (ex. : « montre-moi les sessions où form_error a eu lieu »). */
+/* ---------- Événements ----------
+   Envoie un événement nommé : il permet ensuite de FILTRER les
+   enregistrements (ex. : « seulement les sessions avec form_error »).
+   On l'envoie aux deux API (ancienne Hotjar et Contentsquare). */
 function hjEvent(name) {
+  if (!window.__hotjarLoaded) return;
   if (typeof window.hj === "function") window.hj("event", name);
-  console.log("[demo] événement Hotjar :", name);
+  window._uxa = window._uxa || [];
+  window._uxa.push(["trackPageEvent", name]);
+  console.log("[demo] événement envoyé :", name);
 }
 
 /* ---------- Bandeau de consentement ---------- */
