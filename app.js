@@ -1,55 +1,47 @@
 /* ============================================================
    CONFIGURATION — la SEULE ligne à modifier
-   Identifiant du code de suivi Hotjar.
-   - Nouveau format (Hotjar via Contentsquare) : une chaîne hexadécimale,
-     ex. "2502c5d15712c" -> charge https://t.contentsquare.net/uxa/<ID>.js
-   - Ancien format : un nombre (hjid), ex. 5123456
+   Identifiant du projet Microsoft Clarity
+   (Clarity > Settings > Setup, ou dans l'URL du projet).
    ============================================================ */
-const HOTJAR_ID = "2502c5d15712c";
+const CLARITY_ID = "zazxdpjbht";
 
-const CONSENT_KEY = "sommeilexpress-consent";
+// Nouvelle clé : le consentement donné à l'ancien outil ne vaut pas pour Clarity.
+const CONSENT_KEY = "sommeilexpress-consent-clarity";
 
-/* ---------- Chargement de Hotjar ----------
+/* ---------- Chargement de Clarity ----------
    Pourquoi dans une fonction ? Le RGPD impose de ne déposer les
-   cookies de mesure d'audience qu'APRÈS le consentement. Hotjar
-   n'est donc chargé que si l'utilisateur clique « Accepter ».    */
-function loadHotjar() {
-  if (!HOTJAR_ID) {
-    console.warn("[demo] HOTJAR_ID non renseigné dans app.js : Hotjar n'est pas chargé.");
+   cookies de mesure d'audience qu'APRÈS le consentement. Clarity
+   n'est donc chargé que si l'utilisateur clique « Accepter ».
+   Depuis le 31/10/2025, Clarity exige en plus un signal de consentement
+   explicite (API « consentv2 ») pour les visiteurs de l'UE, du
+   Royaume-Uni et de Suisse : sans lui, chaque page vue devient une
+   session séparée et les enregistrements sont inexploitables.        */
+function loadClarity() {
+  if (!CLARITY_ID) {
+    console.warn("[demo] CLARITY_ID non renseigné dans app.js : Clarity n'est pas chargé.");
     return;
   }
-  if (window.__hotjarLoaded) return; // déjà chargé
-  window.__hotjarLoaded = true;
+  if (window.__clarityLoaded) return; // déjà chargé
+  window.__clarityLoaded = true;
 
-  if (typeof HOTJAR_ID === "number") {
-    // Ancien snippet Hotjar (hjid numérique)
-    (function (h, o, t, j, a, r) {
-      h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments); };
-      h._hjSettings = { hjid: HOTJAR_ID, hjsv: 6 };
-      a = o.getElementsByTagName("head")[0];
-      r = o.createElement("script"); r.async = 1;
-      r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-      a.appendChild(r);
-    })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
-  } else {
-    // Nouveau code de suivi Hotjar (balise Contentsquare)
-    window._uxa = window._uxa || [];
-    const s = document.createElement("script");
-    s.async = true;
-    s.src = "https://t.contentsquare.net/uxa/" + HOTJAR_ID + ".js";
-    document.head.appendChild(s);
-  }
+  // Snippet officiel Microsoft Clarity
+  (function (c, l, a, r, i, t, y) {
+    c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+    t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+    y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+  })(window, document, "clarity", "script", CLARITY_ID);
+
+  // Signal de consentement (mesure d'audience oui, publicité non)
+  window.clarity("consentv2", { ad_Storage: "denied", analytics_Storage: "granted" });
 }
 
-/* ---------- Événements ----------
-   Envoie un événement nommé : il permet ensuite de FILTRER les
-   enregistrements (ex. : « seulement les sessions avec form_error »).
-   On l'envoie aux deux API (ancienne Hotjar et Contentsquare). */
-function hjEvent(name) {
-  if (!window.__hotjarLoaded) return;
-  if (typeof window.hj === "function") window.hj("event", name);
-  window._uxa = window._uxa || [];
-  window._uxa.push(["trackPageEvent", name]);
+/* ---------- Événements personnalisés ----------
+   clarity("event", nom) permet ensuite de FILTRER les enregistrements
+   dans Clarity (filtre « Custom events » : ex. seulement les sessions
+   avec form_error). */
+function trackEvent(name) {
+  if (!window.__clarityLoaded || typeof window.clarity !== "function") return;
+  window.clarity("event", name);
   console.log("[demo] événement envoyé :", name);
 }
 
@@ -65,19 +57,23 @@ function initConsent() {
   const banner = document.getElementById("consent");
   const consent = readConsent();
 
-  if (consent === "yes") loadHotjar();
+  if (consent === "yes") loadClarity();
   else if (consent === null && banner) banner.style.display = "block";
 
   document.getElementById("consent-yes")?.addEventListener("click", () => {
     saveConsent("yes");
     banner.style.display = "none";
-    loadHotjar();
+    loadClarity();
   });
   document.getElementById("consent-no")?.addEventListener("click", () => {
     saveConsent("no");
     banner.style.display = "none";
   });
   document.getElementById("consent-reset")?.addEventListener("click", () => {
+    // Retrait du consentement : Clarity efface son cookie et arrête le suivi
+    if (typeof window.clarity === "function") {
+      window.clarity("consentv2", { ad_Storage: "denied", analytics_Storage: "denied" });
+    }
     try { localStorage.removeItem(CONSENT_KEY); } catch (e) {}
     location.reload();
   });
@@ -86,7 +82,7 @@ function initConsent() {
 /* ---------- Événements sur les éléments piégés ---------- */
 function initTracking() {
   document.querySelectorAll("[data-event]").forEach((el) => {
-    el.addEventListener("click", () => hjEvent(el.dataset.event));
+    el.addEventListener("click", () => trackEvent(el.dataset.event));
   });
 }
 
@@ -120,11 +116,11 @@ function initForm() {
     }
 
     if (!ok) {
-      hjEvent("form_error");
+      trackEvent("form_error");
       return;
     }
 
-    hjEvent("form_success");
+    trackEvent("form_success");
     form.reset();
     form.style.display = "none";
     document.getElementById("success").style.display = "block";

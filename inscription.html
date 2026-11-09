@@ -24,7 +24,7 @@
       <h2>Commander mon sommeil</h2>
       <p>Aucune donnée n'est envoyée : ce formulaire sert uniquement à la démonstration. Invente ce que tu veux.</p>
 
-      <!-- data-hj-suppress / data-cs-mask : Hotjar masque le contenu de ces champs dans
+      <!-- data-clarity-mask : Clarity masque le contenu de ces champs dans
            les enregistrements (on verra des ***** à la place du texte). -->
       <form class="signup" id="signup" novalidate>
         <div class="field">
@@ -41,32 +41,32 @@
         <div class="row-2">
           <div class="field">
             <label for="firstname">Prénom</label>
-            <input id="firstname" name="firstname" required data-hj-suppress data-cs-mask>
+            <input id="firstname" name="firstname" required data-clarity-mask="true">
             <span class="error-msg">Champ invalide.</span>
           </div>
           <div class="field">
             <label for="lastname">Nom</label>
-            <input id="lastname" name="lastname" required data-hj-suppress data-cs-mask>
+            <input id="lastname" name="lastname" required data-clarity-mask="true">
             <span class="error-msg">Champ invalide.</span>
           </div>
         </div>
 
         <div class="field">
           <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" required data-hj-suppress data-cs-mask>
+          <input id="email" name="email" type="email" required data-clarity-mask="true">
           <span class="error-msg">Champ invalide.</span>
         </div>
 
         <!-- PIÈGE n°3 : format très strict (06 12 34 56 78), message d'erreur vague -->
         <div class="field">
           <label for="phone">Téléphone (pour le réveil)</label>
-          <input id="phone" name="phone" required data-hj-suppress data-cs-mask>
+          <input id="phone" name="phone" required data-clarity-mask="true">
           <span class="error-msg">Champ invalide. Va dormir et réessaie.</span>
         </div>
 
         <div class="field">
           <label for="address">Adresse de livraison (ton lit)</label>
-          <input id="address" name="address" required data-hj-suppress data-cs-mask>
+          <input id="address" name="address" required data-clarity-mask="true">
           <span class="error-msg">Champ invalide.</span>
         </div>
 
@@ -103,7 +103,7 @@
             <option>Un camarade qui dormait en cours</option>
             <option>Le groupe WhatsApp de la promo</option>
             <option>J'ai cherché « comment survivre aux partiels »</option>
-            <option>Pendant une présentation sur Hotjar</option>
+            <option>Pendant une présentation de génie logiciel</option>
           </select>
           <span class="error-msg">Champ invalide.</span>
         </div>
@@ -116,12 +116,12 @@
   </main>
 
   <footer>
-    SommeilExpress est une marque fictive et parodique créée pour une démonstration de Hotjar. Aucune heure de sommeil n'a été maltraitée.
+    SommeilExpress est une marque fictive et parodique créée pour une démonstration d'analyse comportementale (Microsoft Clarity). Aucune heure de sommeil n'a été maltraitée.
     · <button id="consent-reset" type="button">Gérer les cookies</button>
   </footer>
 
   <div class="consent" id="consent" role="dialog" aria-label="Consentement">
-    <p>🍪 Ce site utilise <strong>Hotjar</strong> pour analyser anonymement la navigation (clics, défilement, enregistrements de session). Promis, on ne regarde pas à quelle heure tu te couches. Les champs personnels sont masqués.</p>
+    <p>🍪 Ce site utilise <strong>Microsoft Clarity</strong> pour analyser anonymement la navigation (clics, défilement, enregistrements de session). Promis, on ne regarde pas à quelle heure tu te couches. Les champs personnels sont masqués.</p>
     <div class="actions">
       <button class="btn" id="consent-yes" type="button">Accepter</button>
       <button class="btn secondary" id="consent-no" type="button">Refuser</button>

@@ -1,8 +1,14 @@
-# Démo Hotjar — site « SommeilExpress »
+# Démo Microsoft Clarity — site « SommeilExpress »
 
-Site statique (HTML/CSS/JS, sans serveur) conçu pour **montrer ce que Hotjar révèle**.
-SommeilExpress est une marque fictive et parodique (« on te livre des heures de sommeil »), pensée pour faire rire une salle d'étudiants. Le site contient volontairement **4 défauts d'ergonomie**
-que Hotjar va mettre en évidence pendant la démo.
+Site statique (HTML/CSS/JS, sans serveur) conçu pour **montrer ce qu'un outil d'analyse
+comportementale révèle**, ici **Microsoft Clarity** (gratuit : cartes de chaleur,
+enregistrements de session, détection des clics de frustration).
+SommeilExpress est une marque fictive et parodique (« on te livre des heures de sommeil »),
+pensée pour faire rire une salle d'étudiants. Le site contient volontairement
+**4 défauts d'ergonomie** que Clarity met en évidence pendant la démo.
+
+- Site en ligne : https://badreddineiheb.github.io/demo-hotjar/
+- Projet Clarity : `zazxdpjbht` (https://clarity.microsoft.com/projects/view/zazxdpjbht/dashboard)
 
 | Fichier | Rôle |
 |---|---|
@@ -10,73 +16,49 @@ que Hotjar va mettre en évidence pendant la démo.
 | `offres.html` | 3 formules (Sieste Flash, Pack Partiels, Nuit Complète) + un lien mort |
 | `inscription.html` | Formulaire volontairement pénible |
 | `style.css` | Mise en forme |
-| `app.js` | Consentement RGPD + chargement Hotjar + événements + validation du formulaire |
+| `app.js` | Consentement RGPD + chargement de Clarity + événements + validation du formulaire |
 
 ---
 
-## Les 4 pièges (et ce que Hotjar doit montrer)
+## Les 4 pièges (et ce que Clarity doit montrer)
 
-| # | Piège | Où | Outil Hotjar qui le révèle |
+| # | Piège | Où | Ce qui le révèle dans Clarity |
 |---|---|---|---|
-| 1 | Badge « 😴 Dormir maintenant » qui **ressemble à un bouton** mais n'est pas cliquable | Accueil, en haut | **Heatmap de clics** : tache rouge sur un élément inerte (« dead clicks » / « rage clicks ») |
-| 2 | Le **seul vrai bouton d'action** est tout en bas de la page | Accueil, en bas | **Scroll map** : on voit qu'une faible part des visiteurs descend jusque-là |
-| 3 | Téléphone exigé au format exact `06 12 34 56 78` (avec espaces), message vague « Champ invalide. Va dormir et réessaie. » | Inscription | **Recordings** : on voit l'utilisateur retaper le champ, hésiter, abandonner |
-| 4 | Lien « Comparer les formules » qui **ne mène nulle part** | Offres | **Heatmap** + **Recordings** (clic sans effet) |
+| 1 | Badge « 😴 Dormir maintenant » qui **ressemble à un bouton** mais n'est pas cliquable | Accueil, en haut | **Heatmap de clics** + indicateurs **Dead clicks** / **Rage clicks** |
+| 2 | Le **seul vrai bouton d'action** est tout en bas de la page | Accueil, en bas | **Scroll heatmap** : faible part des visiteurs descend jusque-là |
+| 3 | Téléphone exigé au format exact `06 12 34 56 78` (avec espaces), message vague « Champ invalide. Va dormir et réessaie. » | Inscription | **Recordings** : l'utilisateur retape le champ, hésite, abandonne |
+| 4 | Lien « Comparer les formules » qui **ne mène nulle part** | Offres | **Heatmap** + **Dead clicks** + **Recordings** |
 
-Le formulaire envoie aussi des **événements Hotjar** (`form_error`, `form_success`,
-`dead_click_badge`, `dead_click_compare`, `cta_bottom_click`, `plan_flash`, `plan_partiels`, `plan_nuit`) : dans Hotjar,
-on peut **filtrer les enregistrements** par événement (« montre-moi uniquement les
-sessions avec `form_error` »). C'est un excellent moment de démo.
+Le site envoie aussi des **événements personnalisés** avec `clarity("event", nom)` :
+`form_error`, `form_success`, `dead_click_badge`, `dead_click_compare`, `cta_bottom_click`,
+`plan_flash`, `plan_partiels`, `plan_nuit`. Dans Clarity, le filtre **Custom events**
+permet de n'afficher que les sessions avec `form_error`, par exemple.
 
 ### Points RGPD / vie privée intégrés (à mentionner à l'oral)
-- **Bandeau de consentement** : Hotjar n'est chargé **qu'après** un clic sur « Accepter »
-  (voir `loadHotjar()` dans `app.js`). Sans consentement → aucune donnée.
-- **`data-hj-suppress` / `data-cs-mask`** sur les champs personnels : dans les enregistrements, leur contenu
-  apparaît masqué (`*****`). À montrer en rejouant une session du formulaire.
+- **Bandeau de consentement** : Clarity n'est chargé **qu'après** un clic sur « Accepter »
+  (voir `loadClarity()` dans `app.js`). Sans consentement → aucune donnée.
+- **Signal de consentement `consentv2`** : depuis le 31/10/2025, Clarity l'exige pour les
+  visiteurs de l'UE. Sans lui, chaque page vue devient une session isolée.
+- **`data-clarity-mask="true"`** sur les champs personnels : leur contenu apparaît masqué
+  dans les enregistrements. À montrer en rejouant une session du formulaire.
 - Lien « Gérer les cookies » en pied de page pour retirer son consentement.
 
 ---
 
-## Étape 1 — Mettre le site en ligne (GitHub Pages, gratuit)
+## Configuration
 
-Hotjar a besoin d'une **URL publique** : il ne fonctionne pas correctement sur un fichier
-ouvert en local ni sur `localhost`.
+1. Le site est hébergé sur **GitHub Pages** (dépôt public `BadreddineIheb/demo-hotjar`,
+   branche `main`, dossier racine). Clarity a besoin d'une **URL publique**.
+2. Le projet Clarity est déclaré sur le domaine `badreddineiheb.github.io`.
+3. Pour changer de projet : dans `app.js`, ligne `const CLARITY_ID = "...";`, puis
+   ré-uploader `app.js` sur GitHub (*Add file → Upload files → Commit changes*).
 
-1. Crée un compte sur https://github.com (si tu n'en as pas).
-2. **New repository** → nom : `demo-hotjar` → **Public** → *Create repository*.
-3. *uploading an existing file* → glisse les 5 fichiers (`index.html`, `offres.html`,
-   `inscription.html`, `style.css`, `app.js`) → *Commit changes*.
-4. **Settings → Pages** → *Source* : `Deploy from a branch` → Branch `main`, dossier `/ (root)` → *Save*.
-5. Après 1–2 minutes, le site est à : `https://<ton-pseudo>.github.io/demo-hotjar/`
-
-*(Alternative : Netlify — https://app.netlify.com/drop — glisser le dossier, créer un compte pour garder le site.)*
-
-## Étape 2 — Créer le site dans Hotjar
-
-1. Crée un compte gratuit sur https://www.hotjar.com.
-2. Ajoute un site avec l'URL GitHub Pages ci-dessus.
-3. Récupère le **Site ID** (nombre à ~7 chiffres, visible dans *Sites & Organizations*
-   ou dans le code de suivi proposé : `hjid:XXXXXXX`).
-4. Dans `app.js`, ligne `const HOTJAR_ID = ...;` → mets ton identifiant. Nouveau format Hotjar/Contentsquare : chaîne hexadécimale entre guillemets (ex. `"2502c5d15712c"`, déjà configuré) ; ancien format : nombre (ex. `5123456`).
-5. Ré-uploade `app.js` sur GitHub (glisser-déposer → *Commit changes*).
-6. Ouvre ton site, clique **Accepter** sur le bandeau, puis dans Hotjar lance la
-   **vérification de l'installation** (bouton *Verify installation*).
-
-> Si Hotjar te donne un code de suivi d'une autre forme (par ex. une balise Contentsquare),
-> dis-le-moi : on adaptera `loadHotjar()`.
-
-## Étape 3 — Configurer dans le tableau de bord Hotjar (sans code)
-- **Heatmaps** et **Recordings** : activés automatiquement une fois le script installé.
-- **Survey** (optionnel) : crée un sondage affiché sur `inscription.html`, par ex.
-  *« Qu'est-ce qui vous a empêché de finir votre inscription ? »*
-- **Feedback widget** (optionnel) : le petit onglet « Feedback » sur le côté avec des émojis.
-
-## Étape 4 — Générer des données AVANT la présentation
-Les heatmaps ont besoin de plusieurs visites, et les données mettent un peu de temps
-à apparaître. **Quelques jours avant** :
+## Générer des données AVANT la présentation
+Les heatmaps ont besoin de plusieurs visites, et Clarity affiche les données avec
+quelques minutes à quelques heures de délai. **Quelques jours avant** :
 - Envoie le lien à 5–10 camarades/amis avec la consigne : *« Commande le Pack
-  Partiels »* (sans rien dire des pièges) — sur PC **et** sur téléphone.
-- Fais toi-même quelques sessions « réalistes » (cliquer sur le badge, se tromper au téléphone…).
+  Partiels »* (sans rien dire des pièges), sur PC **et** sur téléphone.
+- Demande-leur de cliquer sur **Accepter** dans le bandeau (sinon rien n'est enregistré).
 
 ---
 
@@ -84,16 +66,12 @@ Les heatmaps ont besoin de plusieurs visites, et les données mettent un peu de 
 
 1. **Montrer le site** 30 s : « un site e-commerce (parodique) en apparence correct ».
 2. **Heatmap de l'accueil** → la tache sur le faux bouton : *« les gens cliquent là où rien ne se passe »*.
-3. **Scroll map de l'accueil** → *« seulement X % voient le bouton d'action »*.
-4. **Filtrer les recordings par l'événement `form_error`** → rejouer une session :
-   on voit la galère sur le téléphone… et les champs masqués (`*****`) → transition RGPD.
+3. **Scroll heatmap de l'accueil** → *« seulement X % voient le bouton d'action »*.
+4. **Recordings filtrés sur l'événement `form_error`** → rejouer une session :
+   on voit la galère sur le téléphone… et les champs masqués → transition RGPD.
 5. **Conclusion GL** : les tests JUnit/Selenium vérifient que le site *fonctionne* ;
-   Hotjar montre qu'il est *mal utilisable*. Chaque problème trouvé → une nouvelle
-   Issue GitLab orientée valeur utilisateur.
-
-**Bonus live** : affiche un QR code du site au début de l'exposé pour que la classe
-navigue dessus pendant que tu parles. Note que les données peuvent ne pas apparaître
-instantanément : garde tes données préparées pour la démo principale.
+   l'analyse comportementale montre qu'il est *mal utilisable*. Chaque problème trouvé
+   → une nouvelle Issue GitLab orientée valeur utilisateur.
 
 **Plan B** : fais des captures d'écran / une courte vidéo de la démo au cas où le
 réseau de la salle ne marche pas.
